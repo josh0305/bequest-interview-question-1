@@ -3,6 +3,7 @@ import { JSEncrypt } from "jsencrypt";
 
 const API_URL = "http://localhost:8080";
 
+// RSA key
 const publicKey = `
 -----BEGIN PUBLIC KEY-----
 MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgGnKgy8rVTxJXycxHG4eL6e6EfDf
@@ -11,7 +12,6 @@ v/1Qe1wszj/DFJd5ywrximwI7uKR8zOZkRNE4VHt8R+NJA88Nki2vJog5dpVenfD
 XBD3oZGG48MiIQiXAgMBAAE=
 -----END PUBLIC KEY-----`;
 
-    // Copied from https://github.com/travist/jsencrypt
     const privateKey = `
     -----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgGnKgy8rVTxJXycxHG4eL6e6EfDfOtYJUDyXtdWGmVkl5DyT64/j
@@ -32,12 +32,7 @@ kmq9vd+zLYnbfLrNAkEAokogJLbM1LwD1evVZnuoXcwJYj36nwPZeqHq0qIOc2tg
 function App() {
   const [data, setData] = useState<string>();
   const [reservedData, setReservedData] = useState<any>(null) // used to save the newest data client send
-  const [verifyRes, setVerifyRes] = useState("It is init status now. If you'd like to verify your data, please press the Verify button")
-
   
-  
-  
-
   const encryptData = (data) => {
     var encrypt = new JSEncrypt();
     encrypt.setPublicKey(publicKey);
@@ -86,14 +81,14 @@ function App() {
     if(reservedData != null) {
       await getData();
       if(data === reservedData){
-        setVerifyRes("The data matched, don't worry")
+        alert("The data matched, don't worry")
       } else {
-        setVerifyRes("Oops, the data doesn't match! The data will be automatically fixed, please verify again!")
+        alert("Oops, the data doesn't match! The data will be automatically fixed, please verify again!")
         await updateWithData(reservedData)
         await getData();
       }
     } else {
-      setVerifyRes("Please update the data before verification")
+      alert("Please update the data before verification")
     }
   };
 
@@ -127,12 +122,6 @@ function App() {
         <button style={{ fontSize: "20px" }} onClick={verifyData}>
           Verify Data
         </button>
-      </div>
-      <div>
-        <label>{verifyRes}</label>
-      </div>
-      <div>
-        <label>{reservedData}</label>
       </div>
     </div>
   );
